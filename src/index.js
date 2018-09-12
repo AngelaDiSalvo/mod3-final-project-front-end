@@ -1,50 +1,50 @@
-let map
-const searchCity = document.querySelector("#yelp_form")
-const inputLocation = document.querySelector("#location_input")
-const inputSearchTerm = document.querySelector("#search_input")
-const businessDiv = document.querySelector('#data-business-name')
+let map;
+const searchCity = document.getElementById("yelp_form");
+const searchLocation = document.getElementById("location");
+const searchTerm = document.getElementById("searchTerm");
+const businessDiv = document.querySelector("#data-business-name");
 
-searchCity.addEventListener('submit', e => {
-  e.preventDefault()
-  businessDiv.innerHTML = ``
-  let city = inputLocation.value
-  let term = inputSearchTerm.value
-  initMap(city, term)
-})
+searchCity.addEventListener("submit", e => {
+  e.preventDefault();
+  // businessDiv.innerHTML = ``;
+  const city = searchLocation.value;
+  const term = searchTerm.value;
+  initMap(city, term);
+});
 
 function initMap(city, searchTerm) {
-  let url = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${searchTerm}&location=${city}&limit=10`
+  let url = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${searchTerm}&location=${city}&limit=10`;
   fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${yelpApiKey}`
-      }
-    })
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${yelpApiKey}`
+    }
+  })
     .then(res => res.json())
-    .then(ratingGreaterThanThree)
+    .then(ratingGreaterThanThree);
 
   function ratingGreaterThanThree(data) {
-    const lat = data.businesses[0].coordinates.latitude
-    const lng = data.businesses[0].coordinates.longitude
+    const lat = data.businesses[0].coordinates.latitude;
+    const lng = data.businesses[0].coordinates.longitude;
     var highRatings = data.businesses.filter(business => {
-      return business.rating > 3
-    })
+      return business.rating > 3;
+    });
 
-    let locations = []
-    let ids = []
-    let busName = []
+    let locations = [];
+    let ids = [];
+    let busName = [];
     highRatings.forEach(function(business, i) {
-      let nestedlocations = []
-      nestedlocations.push(business.name)
-      nestedlocations.push(business.coordinates.latitude)
-      nestedlocations.push(business.coordinates.longitude)
-      nestedlocations.push(++i)
-      locations.push(nestedlocations)
-      ids.push(business.id)
-      busName.push(business.name)
-    })
-    let map = new google.maps.Map(document.getElementById('map'), {
+      let nestedlocations = [];
+      nestedlocations.push(business.name);
+      nestedlocations.push(business.coordinates.latitude);
+      nestedlocations.push(business.coordinates.longitude);
+      nestedlocations.push(++i);
+      locations.push(nestedlocations);
+      ids.push(business.id);
+      busName.push(business.name);
+    });
+    let map = new google.maps.Map(document.getElementById("map"), {
       zoom: 10,
       center: new google.maps.LatLng(lat, lng),
       mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -58,64 +58,61 @@ function initMap(city, searchTerm) {
         map: map
       });
 
-      google.maps.event.addListener(marker, 'click', (function(marker, i, highRatings) {
-        return function() {
-          infowindow.setContent(locations[i][0])
-          infowindow.open(map, marker);
-          const businessName = infowindow.content
-          passSongName(businessName)
-        }
-      })(marker, i, highRatings))
+      google.maps.event.addListener(
+        marker,
+        "click",
+        (function(marker, i, highRatings) {
+          return function() {
+            infowindow.setContent(locations[i][0]);
+            infowindow.open(map, marker);
+            const businessName = infowindow.content;
+            passSongName(businessName);
+          };
+        })(marker, i, highRatings)
+      );
     }
   }
 
   function passSongName(business) {
-    businessDiv.innerHTML = `<h3>${business}</h3>`
-    const businessFirst = business.split(" ")[0]
-    const spotUrl = `https://api.spotify.com/v1/search?q=${businessFirst}&type=track&market=US&limit=20&offset=5`
+    businessDiv.innerHTML = `<h3>${business}</h3>`;
+    const businessFirst = business.split(" ")[0];
+    const spotUrl = `https://api.spotify.com/v1/search?q=${businessFirst}&type=track&market=US&limit=20&offset=5`;
     fetch(spotUrl, {
       method: "GET",
       headers: {
-        "Accept": "application/json",
+        Accept: "application/json",
         "Content-Type": "application/json",
-        "Authorization": "Bearer BQCaw5lED85onYBk7E8NFoTP7Ji0eFk71YRhfBxc22quktMoSF8HPck6qJmgFQF38whPunTAQhCEZDWiIms5dF6TGS95xCU9Wb57rHOoH8o7kYoTEkN1AoCjT03lRW6ZHJrrzWG7fenv1ptF"
+        Authorization:
+          "Bearer BQCaw5lED85onYBk7E8NFoTP7Ji0eFk71YRhfBxc22quktMoSF8HPck6qJmgFQF38whPunTAQhCEZDWiIms5dF6TGS95xCU9Wb57rHOoH8o7kYoTEkN1AoCjT03lRW6ZHJrrzWG7fenv1ptF"
       }
     })
-    .then(res => res.json())
-    .then(filterTracks)
+      .then(res => res.json())
+      .then(filterTracks);
   }
 }
 
-function filterTracks(data){
-  const iterateOVer = data.tracks.items
-  const notExplicit = iterateOVer.filter(function(track){
-    return track.explicit == false
-  })
-  function compare(a,b){
-    const popA = a.popularity
-    const popB = b.popularity
-    let comparison = 0
+function filterTracks(data) {
+  const iterateOVer = data.tracks.items;
+  const notExplicit = iterateOVer.filter(function(track) {
+    return track.explicit == false;
+  });
+  function compare(a, b) {
+    const popA = a.popularity;
+    const popB = b.popularity;
+    let comparison = 0;
     if (popA > popB) {
-      comparison = 1
+      comparison = 1;
     } else if (popA < popB) {
-      comparison = -1
+      comparison = -1;
     }
-    return comparison * -1
+    return comparison * -1;
   }
-  notExplicit.sort(compare)
+  notExplicit.sort(compare);
   businessDiv.innerHTML += `
     <p>${notExplicit[0].artists[0].name}</p>
     <p>${notExplicit[0].name}</p>
-    <p>${notExplicit[0].preview_url}</p>`
+    <p>${notExplicit[0].preview_url}</p>`;
 }
-
-
-
-
-
-
-
-
 
 // function initSong(ids) {
 //   let commentsArray=[]

@@ -5,63 +5,100 @@
   <meta charset="utf-8">
   <title>JavaScript Code Challenge</title>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"
+  />
+  <link rel="stylesheet" type="text/css" media="screen" href="./src/styles.css" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+    crossorigin="anonymous">
 
-  <style>
-    input {
-      font-size: 2rem;
-    }
-
-    #map {
-      min-height: 500px;
-      width: 100%;
-      /*position: absolute !important;*/
-      /*bottom: 0px;*/
-    }
-  </style>
 </head>
 
 <body>
-  <div class="container">
-    <div class="row" id="image_content">
-      <div class="card col-md-4"></div>
-      <div id="image_card" class="card col-md-4">
-        <img id="image" data-id/>
-        <h4 id="name"></h4>
-        <span>Likes:
-            <span id="likes">0</span>
-        </span>
-        <button id="like_button">Like</button>
-        <form id="yelp_form">
-          <input id="location_input" type="text" placeholder="Add Location" />
-          <input id="search_input" type="text" placeholder="Add Search Term" />
-          <input type="submit" value="Submit" />
-        </form>
-        <ul id="comments">
 
-        </ul>
-      </div>
-      <div class="card col-md-4"></div>
-    </div>
-  </div>
-  <div class="container">
+  <body>
+    <!-- GOOGLE MAPS -->
+    <div id="map">
 
-    <!-- columns should be the immediate child of a .row -->
-    <div class="row">
-      <!-- <div class="one column">One</div> -->
-      <div class="eight columns">
-        <div id="map"></div>
+    </div>
+    <div class="container">
+
+    </div>
+
+    <!-- NAVBAR SECTION -->
+    <div class="navBar" id="mainNavBar">
+      <div class="container">
+        <a>
+          <main class="container demo-container">
+            <br>
+            <button class="button open-modal">Search Location and Venue</button>
+          </main>
+
+        </a>
       </div>
-      <div class="four columns">
-        <div id="data-business-name"></div>
+      <br>
+      <br>
+
+
+    </div>
+    <div class="container ">
+      <div class="row">
+        <div class="four columns">
+          <div class=" businessInfo" id="businessInfo">
+
+            <strong>708 S Main St</strong>
+            <strong>Houston, TX</strong>
+            <br>
+
+            <strong>Currently playing: "lalalala"</strong>
+          </div>
+        </div>
+        <div class="eight columns"></div>
+
+
       </div>
     </div>
+
+
+
+    <!-- END NAVBAR SECTION -->
+
+
+
+    <div class="modal modal-open">
+
+      <div class="modal-inner">
+        <div class="modal-content">
+          <div class="modal-close-icon">
+            <a href="javascript:void(0)" class="close-modal">
+              <i class="fa fa-times" aria-hidden="true"></i>
+            </a>
+          </div>
+
+          <div class="modal-content-inner">
+            <h4>Search Location & Venue</h4>
+            <form id="yelp_form">
+              <input type="text" class="u-full-width" placeholder="Houston..." id="location"></input>
+              <input type="text" class="u-full-width" placeholder="Venue" id="searchTerm">
+              <input class="button-primary" type="submit" value="submit" id="searchBtn">
+            </form>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    </div>
+
+
+
+    <script src="src/skeleton.js"></script>
 
     <script type="text/javascript" src='src/index.js'></script>
     <script src="src/config.js"></script>
+
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMhBDQdPCjD8wzRQAL-qp7l1jPI9bsHfQ&callback=initMap"></script>
 
-</body>
+  </body>
 
 </html>
