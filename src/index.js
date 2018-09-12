@@ -1,16 +1,19 @@
 let map
-const searchCity = document.querySelector("#comment_form")
-const inputText = document.querySelector("#comment_input")
+const searchCity = document.querySelector("#yelp_form")
+const inputLocation = document.querySelector("#location_input")
+const inputSearchTerm = document.querySelector("#search_input")
 const businessDiv = document.querySelector('#data-business-name')
 
 searchCity.addEventListener('submit', e => {
   e.preventDefault()
-  let city = inputText.value
-  initMap(city)
+  businessDiv.innerHTML = ``
+  let city = inputLocation.value
+  let term = inputSearchTerm.value
+  initMap(city, term)
 })
 
-function initMap(city) {
-  let url = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=coffee&location=${city}&limit=10`
+function initMap(city, searchTerm) {
+  let url = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${searchTerm}&location=${city}&limit=10`
   fetch(url, {
       method: "GET",
       headers: {
@@ -41,7 +44,6 @@ function initMap(city) {
       ids.push(business.id)
       busName.push(business.name)
     })
-
     let map = new google.maps.Map(document.getElementById('map'), {
       zoom: 10,
       center: new google.maps.LatLng(lat, lng),
@@ -56,17 +58,23 @@ function initMap(city) {
         map: map
       });
 
-      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+      // debugger
+      google.maps.event.addListener(marker, 'click', (function(marker, i, highRatings) {
         return function() {
           infowindow.setContent(locations[i][0]);
           infowindow.open(map, marker);
           const businessName = infowindow.content
+          debugger
           passSongName(businessName)
         }
       })(marker, i));
     }
+    // function moreInfo(highRatings){
+    //   debugger
+    //
+    // }
   }
-
+  debugger
   function passSongName(business) {
     businessDiv.innerHTML = `<h3>${business}</h3>`
   }
