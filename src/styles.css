@@ -90,11 +90,22 @@
 .businessInfo {
   text-align: center;
   background-color: #f7f2f2ac;
-  margin-top: 10rem;
+  margin-top: 20rem;
   overflow: hidden;
   position: relative;
   z-index: 1;
 }
+
+#data-business-name {
+  background: rgba(0, 0, 0, 0.5);
+}
+/* .wrapper > h4, .wrapper > h5, .wrapper > h3 {
+  color:#FFFFFF;
+} */
+.wrapper {
+  padding:20px;
+}
+
 
 /*Floats each item to the left with padding of 14 & 16 px.
 Removes the underline with text decoration = none.*/
@@ -126,6 +137,9 @@ Removes the underline with text decoration = none.*/
 /*Set your custom screen width here replacing 700*/
 
 @media (max-width: 700px) {
+  audio {
+    width:80%;
+  }
   /*Ignores the first link (which is Home) in the div and       applies 'display = none' to everything else.   Basically hiding everything but Home*/
   .navBar a:not(:first-child) {
     display: none;

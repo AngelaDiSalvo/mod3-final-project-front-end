@@ -9,6 +9,7 @@ searchCity.addEventListener("submit", e => {
   // businessDiv.innerHTML = ``;
   const city = searchLocation.value;
   const term = searchTerm.value;
+  modal.classList.toggle("modal-open");
   initMap(city, term);
 });
 
@@ -74,7 +75,7 @@ function initMap(city, searchTerm) {
   }
 
   function passSongName(business) {
-    businessDiv.innerHTML = `<h3>${business}</h3>`;
+    businessDiv.innerHTML = `<div class="wrapper"><h3>${business}</h3></div>`;
     const businessFirst = business.split(" ")[0];
     const spotUrl = `https://api.spotify.com/v1/search?q=${businessFirst}&type=track&market=US&limit=20&offset=5`;
     fetch(spotUrl, {
@@ -83,7 +84,7 @@ function initMap(city, searchTerm) {
         Accept: "application/json",
         "Content-Type": "application/json",
         Authorization:
-          "Bearer BQCaw5lED85onYBk7E8NFoTP7Ji0eFk71YRhfBxc22quktMoSF8HPck6qJmgFQF38whPunTAQhCEZDWiIms5dF6TGS95xCU9Wb57rHOoH8o7kYoTEkN1AoCjT03lRW6ZHJrrzWG7fenv1ptF"
+          "Bearer BQDTrNESR_S5Qh8uGRvAx41N_X4c_fn7K7FdvwgBs4rWLChPmW4VMqXXJ4eZ9ZLbIpbm6DKCRMj0TXePAgSq_06wAGzXovesldgp0U2LYVouA2bDSAG7r0kAIlqbMw"
       }
     })
       .then(res => res.json())
@@ -109,9 +110,17 @@ function filterTracks(data) {
   }
   notExplicit.sort(compare);
   businessDiv.innerHTML += `
-    <p>${notExplicit[0].artists[0].name}</p>
-    <p>${notExplicit[0].name}</p>
-    <p>${notExplicit[0].preview_url}</p>`;
+    <h4>${notExplicit[0].artists[0].name}</h4>
+    <h5>${notExplicit[0].name}</h5>
+    <audio controls>
+      <source src=\"${notExplicit[0].preview_url}\" type="audio/mpeg"/>
+      <source src=\"${notExplicit[0].preview_url}\" type="audio/ogg"/>
+    </audio>
+    `;
+}
+
+function playSong() {
+
 }
 
 // function initSong(ids) {
