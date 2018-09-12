@@ -27,7 +27,7 @@ function initMap(city, searchTerm) {
   function ratingGreaterThanThree(data) {
     const lat = data.businesses[0].coordinates.latitude
     const lng = data.businesses[0].coordinates.longitude
-    const highRatings = data.businesses.filter(business => {
+    var highRatings = data.businesses.filter(business => {
       return business.rating > 3
     })
 
@@ -58,27 +58,61 @@ function initMap(city, searchTerm) {
         map: map
       });
 
-      // debugger
       google.maps.event.addListener(marker, 'click', (function(marker, i, highRatings) {
         return function() {
-          infowindow.setContent(locations[i][0]);
+          infowindow.setContent(locations[i][0])
           infowindow.open(map, marker);
           const businessName = infowindow.content
-          debugger
           passSongName(businessName)
         }
-      })(marker, i));
+      })(marker, i, highRatings))
     }
-    // function moreInfo(highRatings){
-    //   debugger
-    //
-    // }
   }
-  debugger
+
   function passSongName(business) {
     businessDiv.innerHTML = `<h3>${business}</h3>`
+    const businessFirst = business.split(" ")[0]
+    const spotUrl = `https://api.spotify.com/v1/search?q=${businessFirst}&type=track&market=US&limit=20&offset=5`
+    fetch(spotUrl, {
+      method: "GET",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer BQCaw5lED85onYBk7E8NFoTP7Ji0eFk71YRhfBxc22quktMoSF8HPck6qJmgFQF38whPunTAQhCEZDWiIms5dF6TGS95xCU9Wb57rHOoH8o7kYoTEkN1AoCjT03lRW6ZHJrrzWG7fenv1ptF"
+      }
+    })
+    .then(res => res.json())
+    .then(filterTracks)
   }
 }
+
+function filterTracks(data){
+  const iterateOVer = data.tracks.items
+  const notExplicit = iterateOVer.filter(function(track){
+    return track.explicit == false
+  })
+  function compare(a,b){
+    const popA = a.popularity
+    const popB = b.popularity
+    let comparison = 0
+    if (popA > popB) {
+      comparison = 1
+    } else if (popA < popB) {
+      comparison = -1
+    }
+    return comparison * -1
+  }
+  notExplicit.sort(compare)
+  businessDiv.innerHTML += `
+    <p>${notExplicit[0].artists[0].name}</p>
+    <p>${notExplicit[0].name}</p>
+    <p>${notExplicit[0].preview_url}</p>`
+}
+
+
+
+
+
 
 
 
