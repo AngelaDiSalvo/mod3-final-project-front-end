@@ -9,7 +9,7 @@ searchCity.addEventListener('submit', e => {
   businessDiv.innerHTML = ``
   let city = inputLocation.value
   let term = inputSearchTerm.value
-  initMap(city, term)
+  initMap(city, term) 
 })
 
 function initMap(city, searchTerm) {
