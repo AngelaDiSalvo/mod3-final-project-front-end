@@ -1,7 +1,17 @@
-let map;
+let map
+const searchCity = document.querySelector("#comment_form")
+const inputText = document.querySelector("#comment_input")
+const businessDiv = document.querySelector('#data-business-name')
 
-function initMap() {
-  fetch('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=coffee&location=houston&limit=10', {
+searchCity.addEventListener('submit', e => {
+  e.preventDefault()
+  let city = inputText.value
+  initMap(city)
+})
+
+function initMap(city) {
+  let url = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=coffee&location=${city}&limit=10`
+  fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -12,6 +22,8 @@ function initMap() {
     .then(ratingGreaterThanThree)
 
   function ratingGreaterThanThree(data) {
+    const lat = data.businesses[0].coordinates.latitude
+    const lng = data.businesses[0].coordinates.longitude
     const highRatings = data.businesses.filter(business => {
       return business.rating > 3
     })
@@ -20,7 +32,6 @@ function initMap() {
     let ids = []
     let busName = []
     highRatings.forEach(function(business, i) {
-
       let nestedlocations = []
       nestedlocations.push(business.name)
       nestedlocations.push(business.coordinates.latitude)
@@ -29,17 +40,6 @@ function initMap() {
       locations.push(nestedlocations)
       ids.push(business.id)
       busName.push(business.name)
-    })
-
-    let searchCity = "miami"
-    let geocoder =  new google.maps.Geocoder()
-    geocoder.geocode( { 'address': searchCity}, function(results, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        const lat = results[0].geometry.location.lat()
-        const lng = results[0].geometry.location.lng()
-      } else {
-        alert("Something got wrong " + status)
-      }
     })
 
     let map = new google.maps.Map(document.getElementById('map'), {
@@ -65,9 +65,15 @@ function initMap() {
         }
       })(marker, i));
     }
+  }
 
+  function passSongName(business) {
+    businessDiv.innerHTML = `<h3>${business}</h3>`
   }
 }
+
+
+
 
 // function initSong(ids) {
 //   let commentsArray=[]
@@ -108,8 +114,3 @@ function initMap() {
 //     }
 //     console.log(commentsArray)
 // }
-
-function passSongName(business) {
-  debugger
-
-}
