@@ -101,37 +101,63 @@ function initMap(city="Houston", searchTerm="pizza") {
     const businessFirst = business.split(" ")[0]
     const spotUrl = `https://api.spotify.com/v1/search?q=${businessFirst}&type=track&market=US&limit=20&offset=5`
 
-    // window.location.replace('https://accounts.spotify.com/authorize?' +
-    //     serializeURL({
-    //       response_type: 'code',
-    //       client_id: client_id,
-    //       scope: 'user-read-private user-read-email',
-    //       redirect_uri: 'http://d929434c.ngrok.io'
-    //     })
-    // )
-    // function serializeURL(obj){
-    //   let str = "";
-    // 	for (let key in obj) {
-    //     if (str != "") {
-    //         str += "&";
-    //    	}
-    //     str += key + "=" + encodeURIComponent(obj[key]);
-    // 	}
-    //   return str
-    // }
-
-
     fetch(spotUrl, {
       method: "GET",
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Authorization": "Bearer BQD5zuRrJVO21_cwJ6y5cPTN4rrbmBW-BMfcrEYbXqnaTlFfTABmCsUaKKkgjqRLOLIkcRK69V03TKaD1RkWwsJiVVgZqUT4j064VSo8Aag2b2S8dKWOpvd7PY2l7IvHQZuPbuK_ty2b0rnL"
+        "Authorization": `Bearer ${passedInToken}`
       }
     })
     .then(res => res.json())
     .then(filterTracks)
+
+    }
+
+fetch('http://localhost:3000/spotify_fetches', {credentials: 'include'})
+  .then(r => r.json())
+  // .then(console.log)
+  .then(token => {
+    if (token.spotify_access_token == null) {
+      // debugger
+      getToken()
+    } else {
+      console.log(token)
+      passedInToken = token.spotify_access_token
+
+    }
+  })
+
+
+
+
+
+
+function getToken(){
+  window.location.replace('https://accounts.spotify.com/authorize?' +
+      serializeURL({
+        response_type: 'code',
+        client_id: client_id,
+        scope: 'user-read-private user-read-email',
+        redirect_uri: 'http://localhost:3000/authorization'
+      })
+  )
+  function serializeURL(obj){
+    let str = "";
+    for (let key in obj) {
+      if (str != "") {
+          str += "&";
+      }
+      str += key + "=" + encodeURIComponent(obj[key]);
+    }
+    return str
   }
+
+}
+
+
+
+
 
 
 function filterTracks(data){
