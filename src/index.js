@@ -9,20 +9,47 @@ searchCity.addEventListener('submit', e => {
   businessDiv.innerHTML = ``
   let city = inputLocation.value
   let term = inputSearchTerm.value
-  initMap(city, term) 
+  fetch('http://localhost:3000/yelp_fetches', {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"},
+    body: JSON.stringify({
+      "location": city,
+      "search_term": term
+    })
+  })
+    .then(re => re.json())
+  initMap(city, term)
 })
 
-function initMap(city, searchTerm) {
-  let url = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${searchTerm}&location=${city}&limit=10`
-  fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${yelpApiKey}`
-      }
+function initMap(city="Houston", searchTerm="pizza") {
+  fetch("http://localhost:3000/yelp_fetches/search", {
+    method: "POST",
+    credentials: 'same-origin',
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body: JSON.stringify({
+      location: city,
+      search_term: searchTerm
     })
-    .then(res => res.json())
-    .then(ratingGreaterThanThree)
+  })
+      .then(resp => resp.json())
+      .then(ratingGreaterThanThree)
+}
+
+
+  // let url = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${searchTerm}&location=${city}&limit=10`
+  // fetch(url, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "Authorization": `Bearer ${yelpApiKey}`
+  //     }
+  //   })
+  //   .then(res => res.json())
+  //   .then(ratingGreaterThanThree)
 
   function ratingGreaterThanThree(data) {
     const lat = data.businesses[0].coordinates.latitude
@@ -73,18 +100,39 @@ function initMap(city, searchTerm) {
     businessDiv.innerHTML = `<h3>${business}</h3>`
     const businessFirst = business.split(" ")[0]
     const spotUrl = `https://api.spotify.com/v1/search?q=${businessFirst}&type=track&market=US&limit=20&offset=5`
+
+    // window.location.replace('https://accounts.spotify.com/authorize?' +
+    //     serializeURL({
+    //       response_type: 'code',
+    //       client_id: client_id,
+    //       scope: 'user-read-private user-read-email',
+    //       redirect_uri: 'http://d929434c.ngrok.io'
+    //     })
+    // )
+    // function serializeURL(obj){
+    //   let str = "";
+    // 	for (let key in obj) {
+    //     if (str != "") {
+    //         str += "&";
+    //    	}
+    //     str += key + "=" + encodeURIComponent(obj[key]);
+    // 	}
+    //   return str
+    // }
+
+
     fetch(spotUrl, {
       method: "GET",
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Authorization": "Bearer BQCaw5lED85onYBk7E8NFoTP7Ji0eFk71YRhfBxc22quktMoSF8HPck6qJmgFQF38whPunTAQhCEZDWiIms5dF6TGS95xCU9Wb57rHOoH8o7kYoTEkN1AoCjT03lRW6ZHJrrzWG7fenv1ptF"
+        "Authorization": "Bearer BQD5zuRrJVO21_cwJ6y5cPTN4rrbmBW-BMfcrEYbXqnaTlFfTABmCsUaKKkgjqRLOLIkcRK69V03TKaD1RkWwsJiVVgZqUT4j064VSo8Aag2b2S8dKWOpvd7PY2l7IvHQZuPbuK_ty2b0rnL"
       }
     })
     .then(res => res.json())
     .then(filterTracks)
   }
-}
+
 
 function filterTracks(data){
   const iterateOVer = data.tracks.items
