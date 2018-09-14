@@ -9,7 +9,7 @@ h3 {
 }
 
 .layer:before {
- /* height:100%; */
+ height:100%;
  content: ' ';
  display: block;
  position: absolute;
@@ -19,7 +19,8 @@ h3 {
  height: 100%;
  z-index: -1;
  opacity: 0.6;
- background: url(images/IMG_1405sm.JPG) 600px 0px repeat-x, url(images/IMG_1618sm.JPG) 600px 450px repeat-x
+ background: url(images/IMG_1405sm.JPG) 600px 0px repeat-x,
+ url(images/IMG_1618sm.JPG) 600px 450px repeat-x
 }
 .layer {
     background-color: rgba(198,80,255, 0.6);
@@ -38,14 +39,39 @@ h3 {
 
 #yelp-section {
   background-color: purple;
-  min-height: 500px;
+  min-height: 600px;
 }
-#spotify-section {
-  background-color: green;
+div#table-section > .container {
+  /* background-color: green; */
+  height:100%;
+
+}
+/* div#table-section {
+  background-color: rgba(198,80,255, 0.6);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+} */
+#main-section {
+  margin-bottom:35px;
+}
+#table-section > div {
+  background:
+  url(images/nautilsm.jpg) 600px 0px repeat-x,
+  url(images/owen.jpg) 600px 450px repeat-x,
+    url(images/IMG_1405sm.JPG) 600px 0px repeat-x
+}
+#displaySearches {
+padding: 30px;
+margin: 30px;
+background-color: rgba(255,255,255, 0.8);
 
 }
 table {
-  position: relative;
+  /* position: relative; */
+  border:none;
 }
 .nav  > h3, .nav > form{
   display: inline;
@@ -53,6 +79,22 @@ table {
 .nav {
   margin:20px;
 }
+small {
+  text-transform: uppercase;
+  color: #fff;
+
+}
+h3#data-busi, h4, h5 {
+  color: #FFF;
+}
+div#data-business-name {
+padding: 0px 30px;
+}
+div#data-business-name > img {
+  max-width: 100%;
+  height: auto;
+}
+
 td{
   padding:0px;
   width:100px;
@@ -63,4 +105,7 @@ form input {
 #yelp_form > input[type="submit"]:nth-child(3) {
  background-color: purple;
  color: white;
+}
+a {
+  color: purple;
 }

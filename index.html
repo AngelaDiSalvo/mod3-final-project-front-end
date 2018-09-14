@@ -15,13 +15,14 @@
     }
 
     #map {
-      min-height: 500px;
+      min-height: 600px;
       width: 100%;
       margin:0px 40px 40px;
       /* position: absolute !important; */
       /*bottom: 0px;*/
     }
   </style>
+  
 </head>
 
 <body onload="displaySearches()">
@@ -49,23 +50,23 @@
       <!-- </div> -->
 
       <!-- columns should be the immediate child of a .row -->
-      <div class="row">
+      <div class="row" id ="main-section">
         <div class="seven columns">
 
           <div id="map"></div>
         </div>
-        <div class="four columns" id="yelp-section">.
+        <div class="four columns" id="yelp-section"><span style="display:none;">.</span>
           <div id="data-business-name"></div>
         </div>
 
     </div>
-
-      <div class="container">
+    <div id="table-section">
+      <!-- <div class="container"> -->
         <div class="twelve columns">
           <div id="displaySearches"></div>
         </div>
-      </div>
-
+      <!-- </div> -->
+    </div>
 
     <script type="text/javascript" src='src/index.js'></script>
     <script src="src/config.js"></script>

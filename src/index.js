@@ -26,10 +26,10 @@ searchCity.addEventListener('submit', e => {
 
 function keepId(data) {
   yelpSearchId = data.id
-  // debugger
 }
 
 function initMap(city = "Houston", searchTerm = "pizza") {
+
   fetch("http://localhost:3000/yelp_fetches/search", {
       method: "POST",
       credentials: 'same-origin',
@@ -47,6 +47,120 @@ function initMap(city = "Houston", searchTerm = "pizza") {
 }
 
 function ratingGreaterThanThree(data) {
+  // keepId(data)
+  var styledMapType = new google.maps.StyledMapType(
+            [
+              {elementType: 'geometry', stylers: [{color: '#ebe3cd'}]},
+              {elementType: 'labels.text.fill', stylers: [{color: '#523735'}]},
+              {elementType: 'labels.text.stroke', stylers: [{color: '#f5f1e6'}]},
+              {
+                featureType: 'administrative',
+                elementType: 'geometry.stroke',
+                stylers: [{color: '#c9b2a6'}]
+              },
+              {
+                featureType: 'administrative.land_parcel',
+                elementType: 'geometry.stroke',
+                stylers: [{color: '#dcd2be'}]
+              },
+              {
+                featureType: 'administrative.land_parcel',
+                elementType: 'labels.text.fill',
+                stylers: [{color: '#ae9e90'}]
+              },
+              {
+                featureType: 'landscape.natural',
+                elementType: 'geometry',
+                stylers: [{color: '#dfd2ae'}]
+              },
+              {
+                featureType: 'poi',
+                elementType: 'geometry',
+                stylers: [{color: '#dfd2ae'}]
+              },
+              {
+                featureType: 'poi',
+                elementType: 'labels.text.fill',
+                stylers: [{color: '#93817c'}]
+              },
+              {
+                featureType: 'poi.park',
+                elementType: 'geometry.fill',
+                stylers: [{color: '#a5b076'}]
+              },
+              {
+                featureType: 'poi.park',
+                elementType: 'labels.text.fill',
+                stylers: [{color: '#447530'}]
+              },
+              {
+                featureType: 'road',
+                elementType: 'geometry',
+                stylers: [{color: '#f5f1e6'}]
+              },
+              {
+                featureType: 'road.arterial',
+                elementType: 'geometry',
+                stylers: [{color: '#fdfcf8'}]
+              },
+              {
+                featureType: 'road.highway',
+                elementType: 'geometry',
+                stylers: [{color: '#f8c967'}]
+              },
+              {
+                featureType: 'road.highway',
+                elementType: 'geometry.stroke',
+                stylers: [{color: '#e9bc62'}]
+              },
+              {
+                featureType: 'road.highway.controlled_access',
+                elementType: 'geometry',
+                stylers: [{color: '#e98d58'}]
+              },
+              {
+                featureType: 'road.highway.controlled_access',
+                elementType: 'geometry.stroke',
+                stylers: [{color: '#db8555'}]
+              },
+              {
+                featureType: 'road.local',
+                elementType: 'labels.text.fill',
+                stylers: [{color: '#806b63'}]
+              },
+              {
+                featureType: 'transit.line',
+                elementType: 'geometry',
+                stylers: [{color: '#dfd2ae'}]
+              },
+              {
+                featureType: 'transit.line',
+                elementType: 'labels.text.fill',
+                stylers: [{color: '#8f7d77'}]
+              },
+              {
+                featureType: 'transit.line',
+                elementType: 'labels.text.stroke',
+                stylers: [{color: '#ebe3cd'}]
+              },
+              {
+                featureType: 'transit.station',
+                elementType: 'geometry',
+                stylers: [{color: '#dfd2ae'}]
+              },
+              {
+                featureType: 'water',
+                elementType: 'geometry.fill',
+                stylers: [{color: '#b9d3c2'}]
+              },
+              {
+                featureType: 'water',
+                elementType: 'labels.text.fill',
+                stylers: [{color: '#92998d'}]
+              }
+            ],
+            {name: 'Styled Map'});
+
   const lat = data.businesses[0].coordinates.latitude
   const lng = data.businesses[0].coordinates.longitude
   var highRatings = data.businesses.filter(business => {
@@ -61,6 +175,11 @@ function ratingGreaterThanThree(data) {
     nestedlocations.push(business.name)
     nestedlocations.push(business.coordinates.latitude)
     nestedlocations.push(business.coordinates.longitude)
+
+    nestedlocations.push(business.image_url)
+    nestedlocations.push(business.display_phone)
+    nestedlocations.push(business.url)
+
     nestedlocations.push(++i)
     locations.push(nestedlocations)
     ids.push(business.id)
@@ -72,6 +191,19 @@ function ratingGreaterThanThree(data) {
     mapTypeId: google.maps.MapTypeId.ROADMAP
   });
 
+  map.mapTypes.set('styled_map', styledMapType);
+        map.setMapTypeId('styled_map');
+        // marker.setMap(map);
+  //       marker.addListener('click', toggleBounce);
+  //
+  //       function toggleBounce() {
+  // if (marker.getAnimation() !== null) {
+  //   marker.setAnimation(null);
+  // } else {
+  //   marker.setAnimation(google.maps.Animation.BOUNCE);
+  // }
+// }
+
   let infowindow = new google.maps.InfoWindow();
   let marker, i;
   for (i = 0; i < locations.length; i++) {
@@ -82,7 +214,9 @@ function ratingGreaterThanThree(data) {
 
     google.maps.event.addListener(marker, 'click', (function(marker, i, highRatings) {
       return function() {
-        infowindow.setContent(locations[i][0])
+        // infowindow.setContent(locations[i][0])
+        infowindow.setContent(`${locations[i][0]}<p>${locations[i][4]}</p><p><img src=${locations[i][3]} width="150"></p>`)
+
         infowindow.open(map, marker);
         const businessName = infowindow.content
         passSongName(businessName)
@@ -93,10 +227,10 @@ function ratingGreaterThanThree(data) {
 }
 
 function passSongName(business) {
-
-  businessDiv.innerHTML = `<div><h3 id="data-busi" >${business}</h3><div>`
+  businessDiv.innerHTML = `<div><small>Business</small><h3 id="data-busi" >${business.split("<")[0]}</h3><div><hr>`
   const businessFirst = business.split(" ")[0]
   const spotUrl = `https://api.spotify.com/v1/search?q=${businessFirst}&type=track&market=US&limit=20&offset=5`
+  // debugger
 
   fetch(spotUrl, {
       method: "GET",
@@ -152,7 +286,6 @@ function getToken() {
 }
 
 function filterTracks(data) {
-  // debugger
     const iterateOVer = data.tracks.items
     const notExplicit = iterateOVer.filter(function(track) {
     return track.explicit == false
@@ -169,7 +302,6 @@ function filterTracks(data) {
     return comparison * -1
   }
   notExplicit.sort(compare);
-
   const artistName = notExplicit[0].artists[0].name
   const songName = notExplicit[0].name
   const fullUrl = `https://open.spotify.com/embed/track/${notExplicit[0].id}`
@@ -188,10 +320,11 @@ function filterTracks(data) {
     </audio>
     </div>
     `;
-  postSpotifyDB(artistName, songName, fullUrl, prevUrl, albumCover, albumCoverSm, albumName)
+
+  postSpotifyDB(artistName, songName, fullUrl, prevUrl, albumCover, albumCoverSm, albumName, yelpSearchId)
 }
 
-function postSpotifyDB(artistName, songName, fullUrl, prevUrl, albumCover, albumCoverSm, albumName) {
+function postSpotifyDB(artistName, songName, fullUrl, prevUrl, albumCover, albumCoverSm, albumName, yelpSearchId) {
   const busiName = document.getElementById('data-busi').innerText
 
   fetch('http://localhost:3000/spotify_fetches', {
@@ -221,12 +354,14 @@ function displaySearches() {
     .then(re => re.json())
     .then(data => {
       const search = data.reverse()
-      // debugger
+      //debugger
       for (let i = 0; i < 10; i++) {
         displaySearchesDiv.innerHTML += `
         <strong>${search[i].yelp_fetch.location}: ${search[i].yelp_fetch.search_term}</strong>
       <table><tr>
+      <th valign="top">Location: </th>
       <td>${search[i].business_name}<td>
+      <th>Song: </th>
       <td>${search[i].artist_name}<td>
       <td><a target="_blank" href="${search[i].full_url}">${search[i].song_name}</a><td>
       <td><img src="${search[i].album_cover_sm}" /></td>
