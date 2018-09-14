@@ -94,7 +94,7 @@ function ratingGreaterThanThree(data) {
 
 function passSongName(business) {
 
-  businessDiv.innerHTML = `<h3 id="data-busi" >${business}</h3>`
+  businessDiv.innerHTML = `<div><h3 id="data-busi" >${business}</h3><div>`
   const businessFirst = business.split(" ")[0]
   const spotUrl = `https://api.spotify.com/v1/search?q=${businessFirst}&type=track&market=US&limit=20&offset=5`
 
@@ -153,12 +153,10 @@ function getToken() {
 
 function filterTracks(data) {
   // debugger
-  if (data.tracks.items.length > 1) {
     const iterateOVer = data.tracks.items
     const notExplicit = iterateOVer.filter(function(track) {
     return track.explicit == false
   })
-
   function compare(a, b) {
     const popA = a.popularity
     const popB = b.popularity
@@ -179,24 +177,8 @@ function filterTracks(data) {
   const albumCover = notExplicit[0].album.images[1].url
   const albumCoverSm = notExplicit[0].album.images[2].url
   const albumName = notExplicit[0].album.name
-  if (artistName == null) {
     businessDiv.innerHTML += `
-      <h4>Artist not available</h4>
-      <h5>${songName}</h5>
-      <img src="${albumCover}"/>
-      <audio controls>
-        <source src=\"${prevUrl}\" type="audio/mpeg"/>
-        <source src=\"${prevUrl}\" type="audio/ogg"/>
-      </audio>
-      `;
-  } else if  (prevUrl == null) {
-businessDiv.innerHTML += `
-<h4>${artistName}</h4>
-<h5>${songName}</h5>
-<img src="${albumCover}"/>
-<p>No Audio Preview Available</p>
-`;
-  }  else { businessDiv.innerHTML += `
+    <div>
     <h4>${artistName}</h4>
     <h5>${songName}</h5>
     <img src="${albumCover}"/>
@@ -204,14 +186,9 @@ businessDiv.innerHTML += `
       <source src=\"${prevUrl}\" type="audio/mpeg"/>
       <source src=\"${prevUrl}\" type="audio/ogg"/>
     </audio>
+    </div>
     `;
-  }
   postSpotifyDB(artistName, songName, fullUrl, prevUrl, albumCover, albumCoverSm, albumName)
-}
-else {
-  alert("No track available")
-  postSpotifyDB(artistName, songName, fullUrl, prevUrl, albumCover, albumCoverSm, albumName)
-}
 }
 
 function postSpotifyDB(artistName, songName, fullUrl, prevUrl, albumCover, albumCoverSm, albumName) {
@@ -235,7 +212,7 @@ function postSpotifyDB(artistName, songName, fullUrl, prevUrl, albumCover, album
       })
     })
     .then(re => re.json())
-    .then(displaySearches)
+    // .then(displaySearches)
 }
 
 function displaySearches() {
@@ -247,7 +224,8 @@ function displaySearches() {
       // debugger
       for (let i = 0; i < 10; i++) {
         displaySearchesDiv.innerHTML += `
-      <table><th>${search[i].yelp_fetch.location}: ${search[i].yelp_fetch.search_term}</th><tr>
+        <strong>${search[i].yelp_fetch.location}: ${search[i].yelp_fetch.search_term}</strong>
+      <table><tr>
       <td>${search[i].business_name}<td>
       <td>${search[i].artist_name}<td>
       <td><a target="_blank" href="${search[i].full_url}">${search[i].song_name}</a><td>

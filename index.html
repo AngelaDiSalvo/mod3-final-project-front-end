@@ -15,49 +15,57 @@
     }
 
     #map {
-      min-height: 500px;
+      min-height: 600px;
       width: 100%;
-      /*position: absolute !important;*/
+      margin:0px 40px 40px;
+      /* position: absolute !important; */
       /*bottom: 0px;*/
     }
   </style>
 </head>
 
 <body onload="displaySearches()">
-  <div class="container">
-    <div class="row" id="image_content">
-
+  <div class="layer">
+    <div class="container" >
+      <!-- <div class="row" id="image_content"> -->
       <!-- <span>Likes:
             <span id="likes">0</span>
         </span>
         <button id="like_button">Like</button> -->
-      <form id="yelp_form">
-        <input id="location_input" type="text" placeholder="Add Location" value="Houston" />
-        <input id="search_input" type="text" placeholder="Add Search Term" value="pizza" />
-        <input type="submit" value="Submit" />
-      </form>
-      <ul id="comments">
-
-      </ul>
-    </div>
-    <div class="card col-md-4"></div>
-
-  </div>
-  <div class="container">
-
-    <!-- columns should be the immediate child of a .row -->
-    <div class="row">
-      <!-- <div class="one column">One</div> -->
-      <div class="eight columns">
-        <div id="map"></div>
-      </div>
-      <div class="four columns">
-        <div id="data-business-name"></div>
-      </div>
-      <div class="twelve columns">
-        <div id="displaySearches"></div>
+      <div class="row nav">
+        <div class="four columns" >
+          <h3>This Dope App</h3>
+        </div>
+        <div class="eight columns">
+          <form id="yelp_form">
+            <input id="location_input" type="text" placeholder="Add Location" value="Houston" />
+            <input id="search_input" type="text" placeholder="Add Search Term" value="pizza" />
+            <input type="submit" value="Submit" />
+          </form>
+        </div>
       </div>
     </div>
+
+      <!-- </div> -->
+
+      <!-- columns should be the immediate child of a .row -->
+      <div class="row">
+        <div class="seven columns">
+
+          <div id="map"></div>
+        </div>
+        <div class="five columns" id="yelp-section">.
+          <div id="data-business-name"></div>
+        </div>
+
+    </div>
+
+      <div class="container">
+        <div class="twelve columns">
+          <div id="displaySearches"></div>
+        </div>
+      </div>
+
 
     <script type="text/javascript" src='src/index.js'></script>
     <script src="src/config.js"></script>
