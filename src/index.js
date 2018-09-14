@@ -384,23 +384,23 @@ function displaySearches() {
   fetch('http://localhost:3000/spotify_fetches')
     .then(re => re.json())
     .then(data => {
-      const search = data.reverse()
-      //debugger
-      for (let i = 0; i < 10; i++) {
-        displaySearchesDiv.innerHTML += `
-<p style="margin-bottom: 0rem; margin-top: 2.5rem; text-align: center; text-transform: uppercase; font-weight: bold; color: #000; display:block; ">${search[i].yelp_fetch.location}: ${search[i].yelp_fetch.search_term}</p><hr style="color:#000">
-      <table><tr>
-      <th valign="top">Business: </th>
-      <td>${search[i].business_name}<td>
-      <th valign="top">Artist: </th>
-      <td>${search[i].artist_name}<td>
-      <th valign="top">Song: </th>
-
-      <td><a target="_blank" href="${search[i].full_url}" onclick="window.open(this.href, 'mywin',
-'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" >${search[i].song_name}</a><td>
-      <td><img src="${search[i].album_cover_sm}" /></td>
-      <td>${search[i].album_name}<td>
-      </tr></table>`
+      if (displaySearchesDiv.innerHTML == "") {
+        const search = data.reverse()
+        for (let i = 0; i < 10; i++) {
+          displaySearchesDiv.innerHTML += `
+          <p style="margin-bottom: 0rem; margin-top: 2.5rem; text-align: center; text-transform: uppercase; font-weight: bold; color: #000; display:block; ">${search[i].yelp_fetch.location}: ${search[i].yelp_fetch.search_term}</p><hr style="color:#000">
+          <table><tr>
+          <th valign="top">Business: </th>
+          <td>${search[i].business_name}<td>
+          <th valign="top">Artist: </th>
+          <td>${search[i].artist_name}<td>
+          <th valign="top">Song: </th>
+          <td><a target="_blank" href="${search[i].full_url}" onclick="window.open(this.href, 'mywin',
+          'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" >${search[i].song_name}</a><td>
+          <td><img src="${search[i].album_cover_sm}" /></td>
+          <td>${search[i].album_name}<td>
+          </tr></table>`
+        }
       }
     })
 }
