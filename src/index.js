@@ -186,7 +186,7 @@ function ratingGreaterThanThree(data) {
     busName.push(business.name)
   })
   let map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 10,
+    zoom: 11,
     center: new google.maps.LatLng(lat, lng),
     mapTypeId: google.maps.MapTypeId.ROADMAP
   });
@@ -227,7 +227,7 @@ function ratingGreaterThanThree(data) {
 }
 
 function passSongName(business) {
-  businessDiv.innerHTML = `<div><small>Business</small><h3 id="data-busi" >${business.split("<")[0]}</h3><div><hr>`
+  businessDiv.innerHTML = `<div class="businessDiv"><small>Business</small><h3 id="data-busi" >${business.split("<")[0]}</h3></div><hr>`
   const businessFirst = business.split(" ")[0]
   const spotUrl = `https://api.spotify.com/v1/search?q=${businessFirst}&type=track&market=US&limit=20&offset=5`
   // debugger
@@ -286,6 +286,10 @@ function getToken() {
 }
 
 function filterTracks(data) {
+  if (data.tracks.items.length == 0) {
+    businessDiv.innerHTML += `
+    <h5>This business hates music and fun and smiling. There's no need to visit ever.</h5>`
+  }
     const iterateOVer = data.tracks.items
     const notExplicit = iterateOVer.filter(function(track) {
     return track.explicit == false
@@ -309,17 +313,44 @@ function filterTracks(data) {
   const albumCover = notExplicit[0].album.images[1].url
   const albumCoverSm = notExplicit[0].album.images[2].url
   const albumName = notExplicit[0].album.name
-    businessDiv.innerHTML += `
-    <div>
-    <h4>${artistName}</h4>
-    <h5>${songName}</h5>
-    <img src="${albumCover}"/>
-    <audio controls>
+  if (prevUrl == null) {
+      businessDiv.innerHTML += `
+      <div class="songDiv">
+      <small>Artist</small>
+      <h5>${artistName}</h5>
+      <small>Song Name</small>
+      <h5>${songName}</h5>
+      <img id="cover" src="${albumCover}"/>
+      <small>Preview unavailable</small>
+      </div>`
+    } else {
+      businessDiv.innerHTML += `
+      <div class="songDiv">
+      <small>Artist</small>
+      <h5>${artistName}</h5>
+      <small>Song Name</small>
+      <h5>${songName}</h5>
+      <img id="cover" src="${albumCover}"/>
+      <audio controls id="cover">
       <source src=\"${prevUrl}\" type="audio/mpeg"/>
       <source src=\"${prevUrl}\" type="audio/ogg"/>
-    </audio>
-    </div>
-    `;
+      </audio>
+      </div>`
+    }
+
+    // businessDiv.innerHTML += `
+    // <div class="songDiv">
+    // <small>Artist</small>
+    // <h5>${artistName}</h5>
+    // <small>Song Name</small>
+    // <h5>${songName}</h5>
+    // <img id="cover" src="${albumCover}"/>
+    // <audio controls id="cover">
+    //   <source src=\"${prevUrl}\" type="audio/mpeg"/>
+    //   <source src=\"${prevUrl}\" type="audio/ogg"/>
+    // </audio>
+    // </div>
+    // `;
 
   postSpotifyDB(artistName, songName, fullUrl, prevUrl, albumCover, albumCoverSm, albumName, yelpSearchId)
 }
@@ -363,7 +394,8 @@ function displaySearches() {
       <td>${search[i].business_name}<td>
       <th>Song: </th>
       <td>${search[i].artist_name}<td>
-      <td><a target="_blank" href="${search[i].full_url}">${search[i].song_name}</a><td>
+      <td><a target="_blank" href="${search[i].full_url}" onclick="window.open(this.href, 'mywin',
+'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" >${search[i].song_name}</a><td>
       <td><img src="${search[i].album_cover_sm}" /></td>
       <td>${search[i].album_name}<td>
       </tr></table>`

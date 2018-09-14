@@ -39,7 +39,7 @@ h3 {
 
 #yelp-section {
   background-color: purple;
-  min-height: 600px;
+  min-height: 620px;
 }
 div#table-section > .container {
   /* background-color: green; */
@@ -55,22 +55,21 @@ div#table-section > .container {
   height: 100%;
 } */
 #main-section {
-  margin-bottom:35px;
+  margin-bottom:15px;
 }
 #table-section > div {
   background:
   url(images/nautilsm.jpg) 600px 0px repeat-x,
   url(images/owen.jpg) 600px 450px repeat-x,
-    url(images/IMG_1405sm.JPG) 600px 0px repeat-x
+  url(images/IMG_1405sm.JPG) 600px 1150px repeat-x
 }
 #displaySearches {
 padding: 30px;
 margin: 30px;
 background-color: rgba(255,255,255, 0.8);
-
 }
 table {
-  /* position: relative; */
+  margin: 0 auto;
   border:none;
 }
 .nav  > h3, .nav > form{
@@ -82,7 +81,19 @@ table {
 small {
   text-transform: uppercase;
   color: #fff;
-
+}
+h5 {
+  font-size: 2rem;
+}
+.businessDiv {
+margin-top: 10px;
+}
+.songDiv {
+  width: 100%;
+}
+hr {
+  margin-top: 0rem;
+  margin-bottom: 1rem;
 }
 h3#data-busi, h4, h5 {
   color: #FFF;
@@ -90,11 +101,15 @@ h3#data-busi, h4, h5 {
 div#data-business-name {
 padding: 0px 30px;
 }
-div#data-business-name > img {
-  max-width: 100%;
-  height: auto;
+#cover
+ {
+  display: block;
+  margin: auto;
+  padding: 5px 0px;
 }
-
+img#cover {
+  width: 260px;
+}
 td{
   padding:0px;
   width:100px;
