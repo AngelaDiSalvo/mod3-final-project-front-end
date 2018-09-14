@@ -17,7 +17,7 @@ function initMap() {
       // debugger
       return business.rating > 3
     })
-    debugger
+    // debugger
 
     let locations = []
 
@@ -36,13 +36,36 @@ function initMap() {
 
     })
 
+    //
 
+    let searchCity = "miami, us"
+    let lat = 0
+    let lng = 0
+    let myLatlng = {lat: lat, lng: lng}
 
+        let geocoder =  new google.maps.Geocoder()
+        geocoder.geocode( { 'address': searchCity}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            lat = parseInt(results[0].geometry.location.lat())
+            lng = parseInt(results[0].geometry.location.lng())
+            myLatlng = {lat: lat, lng: lng}
+            centerMap(myLatlng)
+            // debugger
+          } else {
+            alert("Something got wrong " + status)
+          }
+        })
+    //
+    // pass in the values from Angela's code
+
+    // debugger
+    function centerMap() {
     let map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 10,
-      center: new google.maps.LatLng(29.7590441, -95.3635909),
+      zoom: 8,
+      center: myLatlng,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     });
+    }
 
     let infowindow = new google.maps.InfoWindow();
 
@@ -64,6 +87,17 @@ function initMap() {
 
   }
 }
+
+// $("#btn").click(function(){
+//             var geocoder =  new google.maps.Geocoder();
+//     geocoder.geocode( { 'address': 'miami, us'}, function(results, status) {
+//           if (status == google.maps.GeocoderStatus.OK) {
+//             alert("location : " + results[0].geometry.location.lat() + " " +results[0].geometry.location.lng());
+//           } else {
+//             alert("Something got wrong " + status);
+//           }
+//         });
+// });
 
 // function initSong () {
 //
